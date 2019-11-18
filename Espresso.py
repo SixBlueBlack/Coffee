@@ -26,7 +26,6 @@ class MyWidget(QMainWindow):
     def table(self):
         self.tableWidget.setRowCount(0)
         self.a = e_model.get_information()
-        print(self.a)
         if self.a:
             for elem in self.a:
                 rowPosition = self.tableWidget.rowCount()
