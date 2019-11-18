@@ -41,6 +41,7 @@ class MyWidget(QMainWindow):
 
                 self.tableWidget.resizeColumnsToContents()
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     e_model = EventsModel()
