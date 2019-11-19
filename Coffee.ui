@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Заготовка</string>
+     <string>Добавить</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>для</string>
+     <string>Изменить</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
@@ -50,7 +50,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>следующих</string>
+     <string>Удалить все</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
@@ -63,7 +63,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>задач</string>
+     <string>Удалить выделенное</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget">

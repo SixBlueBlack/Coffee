@@ -1,7 +1,7 @@
 import sys
 import sqlite3
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QAbstractItemView, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAbstractItemView, QTableWidgetItem, QDialog
 
 
 class EventsModel:
@@ -12,6 +12,13 @@ class EventsModel:
     def get_information(self):
         return self.cursor.execute("SELECT * FROM Coffee").fetchall()
 
+    def add_event(self, kind, degree_of_roasting, typ, taste, price, amount):
+        self.cursor.execute(
+            "INSERT INTO Coffee(kind, degree_of_roasting, type, taste, price, amount) VALUES (?, ?, ?, ?, ?, ?)",
+            (kind, degree_of_roasting, typ, taste, price, amount))
+        self.conn.commit()
+        ex.table()
+
 
 class MyWidget(QMainWindow):
     def __init__(self):
@@ -21,7 +28,18 @@ class MyWidget(QMainWindow):
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWidget.resizeColumnsToContents()
 
+        self.pushButton.clicked.connect(self.add_event)
+        self.pushButton_2.clicked.connect(self.update_event)
+
         self.table()
+
+    def add_event(self):
+        self.update = False
+        event_win.exec()
+
+    def update_event(self):
+        self.update = True
+        event_win.exec()
 
     def table(self):
         self.tableWidget.setRowCount(0)
@@ -41,9 +59,53 @@ class MyWidget(QMainWindow):
                 self.tableWidget.resizeColumnsToContents()
 
 
+class SetEventWin(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('addEditCoffeeForm.ui', self)
+
+        self.radioButton_2.setChecked(True)
+
+        self.buttonBox.accepted.connect(self.write_event)
+
+    def write_event(self):
+        if ex.update:
+            self.update_event()
+            return
+        if self.radioButton.isChecked() == True:
+            a = 'зерновой'
+        else:
+            a = 'молотый'
+        e_model.add_event(self.title.text(), self.textEdit.toPlainText(), a, self.description.toPlainText(),
+                          self.lineEdit.text(), self.lineEdit_2.text())
+
+        self.title.setText('')
+        self.description.setText('')
+        self.textEdit.setText('')
+        self.lineEdit.setText('')
+        self.lineEdit_2.setText('')
+        self.radioButton_2.setChecked(True)
+
+    def update_event(self):
+        if self.radioButton.isChecked() == True:
+            a = 'зерновой'
+        else:
+            a = 'молотый'
+        e_model.add_event(self.title.text(), self.textEdit.toPlainText(), a, self.description.toPlainText(),
+                          self.lineEdit.text(), self.lineEdit_2.text())
+
+        self.title.setText('')
+        self.description.setText('')
+        self.textEdit.setText('')
+        self.lineEdit.setText('')
+        self.lineEdit_2.setText('')
+        self.radioButton_2.setChecked(True)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     e_model = EventsModel()
     ex = MyWidget()
+    event_win = SetEventWin()
     ex.show()
     sys.exit(app.exec_())
