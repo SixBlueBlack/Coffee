@@ -19,7 +19,7 @@
      <rect>
       <x>0</x>
       <y>491</y>
-      <width>200</width>
+      <width>267</width>
       <height>61</height>
      </rect>
     </property>
@@ -30,9 +30,9 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>266</x>
       <y>491</y>
-      <width>200</width>
+      <width>267</width>
       <height>61</height>
      </rect>
     </property>
@@ -43,27 +43,14 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>532</x>
       <y>491</y>
-      <width>200</width>
+      <width>267</width>
       <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string>Удалить все</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_4">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>491</y>
-      <width>200</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Удалить выделенное</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget">
@@ -74,6 +61,12 @@
       <width>800</width>
       <height>491</height>
      </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
     </property>
     <column>
      <property name="text">

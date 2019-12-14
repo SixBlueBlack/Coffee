@@ -17,28 +17,59 @@ class EventsModel:
             "INSERT INTO Coffee(kind, degree_of_roasting, type, taste, price, amount) VALUES (?, ?, ?, ?, ?, ?)",
             (kind, degree_of_roasting, typ, taste, price, amount))
         self.conn.commit()
-        ex.table()
+
+    def update_event(self, id, kind, degree_of_roasting, typ, taste, price, amount):
+        self.cursor.execute(
+            "UPDATE Coffee SET kind = ?, degree_of_roasting = ?, type = ?, "
+            "taste = ?, price = ?, amount = ? WHERE id = ?",
+            (kind, degree_of_roasting, typ, taste, price, amount, id))
+        self.conn.commit()
+
+    def clear(self):
+        self.cursor.execute("DELETE from Coffee")
+        self.conn.commit()
 
 
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Coffee.ui', self)
+        uic.loadUi('main.ui', self)
+        self.update = False
+        self.a = []
 
         self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWidget.resizeColumnsToContents()
 
         self.pushButton.clicked.connect(self.add_event)
         self.pushButton_2.clicked.connect(self.update_event)
+        self.pushButton_3.clicked.connect(self.clear)
 
         self.table()
 
     def add_event(self):
         self.update = False
+        event_win.title.setText('')
+        event_win.description.setText('')
+        event_win.textEdit.setText('')
+        event_win.lineEdit.setText('')
+        event_win.lineEdit_2.setText('')
+        event_win.radioButton_2.setChecked(False)
         event_win.exec()
 
     def update_event(self):
+        self.a = []
+        if not self.tableWidget.currentItem():
+            return
+        for i in range(7):
+            self.a.append(self.tableWidget.item(self.tableWidget.currentRow(), i).text())
+        print(self.a)
         self.update = True
+        event_win.title.setText(self.a[1])
+        event_win.description.setText(self.a[4])
+        event_win.textEdit.setText(self.a[2])
+        event_win.lineEdit.setText(self.a[5])
+        event_win.lineEdit_2.setText(self.a[6])
+        event_win.radioButton_2.setChecked(True)
         event_win.exec()
 
     def table(self):
@@ -57,6 +88,11 @@ class MyWidget(QMainWindow):
                 self.tableWidget.setItem(rowPosition, 6, QTableWidgetItem(str(elem[6])))
 
                 self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.sortItems(5)
+
+    def clear(self):
+        e_model.clear()
+        self.table()
 
 
 class SetEventWin(QDialog):
@@ -69,37 +105,18 @@ class SetEventWin(QDialog):
         self.buttonBox.accepted.connect(self.write_event)
 
     def write_event(self):
+        if self.radioButton.isChecked() == True:
+            a = 'зерновой'
+        else:
+            a = 'молотый'
         if ex.update:
-            self.update_event()
-            return
-        if self.radioButton.isChecked() == True:
-            a = 'зерновой'
+            e_model.update_event(ex.a[0], self.title.text(), self.textEdit.toPlainText(), a,
+                                 self.description.toPlainText(),
+                                 self.lineEdit.text(), self.lineEdit_2.text())
         else:
-            a = 'молотый'
-        e_model.add_event(self.title.text(), self.textEdit.toPlainText(), a, self.description.toPlainText(),
-                          self.lineEdit.text(), self.lineEdit_2.text())
-
-        self.title.setText('')
-        self.description.setText('')
-        self.textEdit.setText('')
-        self.lineEdit.setText('')
-        self.lineEdit_2.setText('')
-        self.radioButton_2.setChecked(True)
-
-    def update_event(self):
-        if self.radioButton.isChecked() == True:
-            a = 'зерновой'
-        else:
-            a = 'молотый'
-        e_model.add_event(self.title.text(), self.textEdit.toPlainText(), a, self.description.toPlainText(),
-                          self.lineEdit.text(), self.lineEdit_2.text())
-
-        self.title.setText('')
-        self.description.setText('')
-        self.textEdit.setText('')
-        self.lineEdit.setText('')
-        self.lineEdit_2.setText('')
-        self.radioButton_2.setChecked(True)
+            e_model.add_event(self.title.text(), self.textEdit.toPlainText(), a, self.description.toPlainText(),
+                              self.lineEdit.text(), self.lineEdit_2.text())
+        ex.table()
 
 
 if __name__ == '__main__':
