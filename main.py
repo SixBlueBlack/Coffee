@@ -1,12 +1,13 @@
 import sys
 import sqlite3
-from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAbstractItemView, QTableWidgetItem, QDialog
+from addEditCoffeeForm import Ui_Dialog
+from main1 import Ui_MainWindow
 
 
 class EventsModel:
     def __init__(self):
-        self.conn = sqlite3.connect('Coffee.db')
+        self.conn = sqlite3.connect('data/Coffee.db')
         self.cursor = self.conn.cursor()
 
     def get_information(self):
@@ -30,10 +31,10 @@ class EventsModel:
         self.conn.commit()
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
         self.update = False
         self.a = []
 
@@ -95,10 +96,10 @@ class MyWidget(QMainWindow):
         self.table()
 
 
-class SetEventWin(QDialog):
+class SetEventWin(QDialog, Ui_Dialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
 
         self.radioButton_2.setChecked(True)
 
